@@ -28,7 +28,7 @@ struct PeerListView: View {
                 List(viewModel.peers) { peer in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(peer.id)
+                            Text(peer.id.short())
                                 .font(.headline)
                             Text(peer.status)
                                 .font(.subheadline)
@@ -46,7 +46,7 @@ struct PeerListView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("\(viewModel.peerID)")
+                        Text("\(viewModel.myPeerID.short())")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -54,7 +54,7 @@ struct PeerListView: View {
             }
         }
         .onAppear {
-            viewModel.updatePeers()
+            viewModel.refreshPeers()
         }
     }
 }

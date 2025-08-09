@@ -47,6 +47,10 @@ struct TaskListView: View {
                                 }
                             Text(task.name)
                                 .strikethrough(task.completed)
+                            Spacer()
+                            Text(task.creator.short())
+                                .font(.footnote)
+                                .foregroundColor(.gray.opacity(0.4))
                         }
                     }
                     .onDelete { indexSet in
@@ -61,7 +65,7 @@ struct TaskListView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     VStack {
-                        Text("\(viewModel.peerID)")
+                        Text("\(viewModel.myPeerID.short())")
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }

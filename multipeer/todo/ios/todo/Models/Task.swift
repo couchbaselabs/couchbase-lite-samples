@@ -1,5 +1,5 @@
 //
-//  Peer.swift
+//  Task.swift
 //  todo
 //
 //  Copyright (c) 2025 Couchbase, Inc All rights reserved.
@@ -18,11 +18,13 @@
 //
 
 import Foundation
-import CouchbaseLiteSwift
 
-struct Peer: Identifiable {
-    var id: String { peerID.short }
-    var peerID: PeerID
-    var online: Bool
-    var status: String
+/// Task information
+/// Note: Named TodoTask to avoid conflict with Swift’s built-in Task class.
+struct TodoTask: Identifiable {
+    var id: String
+    var name: String
+    var completed: Bool
+    var creator: String
+    var createdAt: Date
 }

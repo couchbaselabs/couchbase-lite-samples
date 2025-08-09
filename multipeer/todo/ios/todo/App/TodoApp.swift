@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct todoApp: App {
+struct TodoApp: App {
     var body: some Scene {
         WindowGroup {
             TaskListView()

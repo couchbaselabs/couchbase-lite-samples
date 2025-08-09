@@ -1,5 +1,5 @@
 //
-//  Task.swift
+//  Extensions.swift
 //  todo
 //
 //  Copyright (c) 2025 Couchbase, Inc All rights reserved.
@@ -17,10 +17,17 @@
 //  limitations under the License.
 //
 
-import Foundation
+import CouchbaseLiteSwift
 
-struct Task: Identifiable {
-    var id: String
-    var name: String
-    var completed: Bool
+extension PeerID {
+    var str: String {
+        return String(describing: self)
+    }
+}
+
+extension String {
+    func short(_ len: Int = 6) -> String {
+        if count <= len { return self }
+        return String(prefix(len))
+    }
 }
