@@ -33,7 +33,7 @@ final class DatabaseManager {
     private let databaseName = "todo"
     private let collectionName = "tasks"
     private let groupID = "com.couchbase.multipeer.todo"
-    private let commonName = "multipeer-todo"
+    private let baseCommonName = "multipeer-todo"
     private let identityLabel = "com.couchbase.multipeer.todo.identity"
     private let activities = ["stopped", "offline", "connecting", "idle", "busy"]
     
@@ -157,9 +157,11 @@ final class DatabaseManager {
             try? TLSIdentity.deleteIdentity(withLabel: identityLabel)
         }
         
+        let cn = "\(baseCommonName)-\(UUID().uuidString.short(8))"
+        
         return try TLSIdentity.createIdentity(
             for: [.clientAuth, .serverAuth],
-            attributes: [certAttrCommonName: commonName],
+            attributes: [certAttrCommonName: cn],
             label: identityLabel
         )
     }
