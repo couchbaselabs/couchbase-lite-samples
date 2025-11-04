@@ -1,13 +1,13 @@
 {
-  "originHash" : "2796834fffaec988868403bc1f8d8ab3c077e24d0500cea5f8d45d77ac14345d",
+  "originHash" : "605cea4f3350a31294ce395db7eb29a3ebe8424f861e7b6ee059e2e4d08d6714",
   "pins" : [
     {
       "identity" : "couchbase-lite-ios-vector-search-spm",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/couchbase/couchbase-lite-ios-vector-search-spm/",
       "state" : {
-        "revision" : "d38fad659490ae67a52585e88f6e26408fcd0815",
-        "version" : "1.0.0-beta.1"
+        "revision" : "0d275616008c0774c82cf39c9b9d915b37b69b78",
+        "version" : "2.0.0"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/couchbase/couchbase-lite-swift-ee.git",
       "state" : {
-        "revision" : "4961912218e85d0020e000fd61fe40dfa2cd9ffa",
-        "version" : "3.2.0-beta.1"
+        "revision" : "f3e547defe410580d9f91567cc923696d378c535",
+        "version" : "4.0.0"
       }
     }
   ],

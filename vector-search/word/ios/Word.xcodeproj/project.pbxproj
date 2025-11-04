@@ -415,7 +415,7 @@
 			repositoryURL = "https://github.com/couchbase/couchbase-lite-swift-ee.git";
 			requirement = {
 				kind = exactVersion;
-				version = "3.2.0-beta.1";
+				version = 4.0.0;
 			};
 		};
 		4001A2052BB505370067B507 /* XCRemoteSwiftPackageReference "couchbase-lite-ios-vector-search-spm" */ = {
@@ -423,7 +423,7 @@
 			repositoryURL = "https://github.com/couchbase/couchbase-lite-ios-vector-search-spm/";
 			requirement = {
 				kind = exactVersion;
-				version = "1.0.0-beta.1";
+				version = 2.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
