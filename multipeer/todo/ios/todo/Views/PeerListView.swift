@@ -30,13 +30,13 @@ struct PeerListView: View {
                         VStack(alignment: .leading) {
                             Text(peer.id.short())
                                 .font(.headline)
-                            Text(peer.status)
+                            Text(peer.replicatorStatus)
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
                         }
                         Spacer()
                         Circle()
-                            .fill(peer.online ? Color.green : Color.red)
+                            .fill(peer.connected ? Color.green : Color.gray.opacity(0.5))
                             .frame(width: 12, height: 12)
                     }
                     .padding(.vertical, 4)
@@ -54,7 +54,7 @@ struct PeerListView: View {
             }
         }
         .onAppear {
-            viewModel.refreshPeers()
+            viewModel.updatePeers()
         }
     }
 }

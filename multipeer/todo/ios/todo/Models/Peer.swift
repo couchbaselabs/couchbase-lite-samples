@@ -22,6 +22,6 @@ import Foundation
 /// Peer info and it's  status.
 struct Peer: Identifiable {
     var id: String
-    var online: Bool
-    var status: String
+    var connected: Bool
+    var replicatorStatus: String
 }

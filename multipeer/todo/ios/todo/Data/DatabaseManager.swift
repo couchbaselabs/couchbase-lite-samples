@@ -46,7 +46,8 @@ final class DatabaseManager {
     
     // MARK: - MultipeerReplicator
     private var replicator: MultipeerReplicator!
-    private var refreshPeersWorkItem: DispatchWorkItem?
+    private var updatePeersWorkItem: DispatchWorkItem?
+    private var peerReplicatorStatus: [String: PeerReplicatorStatus] = [:]
     
     // MARK: - Publishers
     private var cancellables = Set<AnyCancellable>()
@@ -112,10 +113,17 @@ final class DatabaseManager {
     }
     
     private func setupReplicator() throws {
-        let collections = MultipeerCollectionConfiguration.fromCollections([collection])
-        let identity = try myPeerIdentity()
+        // Get or create a peer identity, TLS identity including key pairs and certificate
+        let identity = try getPeerIdentity()
+        
+        // Setup a peer authenticator
         let auth = MultipeerCertificateAuthenticator { _, _ in true }
         
+        // Setup 'tasks' collection for replication
+        let collections =  [MultipeerCollectionConfiguration(collection: collection)]
+        
+        // Create a multipeer replicator config with groupID ('com.couchbase.multipeer.todo'),
+        // identity, authenticator, and collections
         let config = MultipeerReplicatorConfiguration(
             peerGroupID: groupID,
             identity: identity,
@@ -123,33 +131,35 @@ final class DatabaseManager {
             collections: collections
         )
         
+        // Create a multipeer replicator with the config
         replicator = try MultipeerReplicator(config: config)
-        
+            
+        // Listen to the overall status change
         replicator.statusPublisher()
             .sink { [weak self] status in
-                if let error = status.error {
-                    print("Multipeer Replicator Error: \(error)")
-                }
-                self?.onOnlineChange?(status.active)
+                self?.onMultipeerReplicatorStatusChange(status)
             }
             .store(in: &cancellables)
         
+        // Listen to the peer discovery status
         replicator.peerDiscoveryStatusPublisher()
             .sink { [weak self] status in
-                self?.refreshPeers()
+                self?.onPeerDiscoveryStatusChange(status)
             }
             .store(in: &cancellables)
         
+        // Listen to the peer's replication status
         replicator.peerReplicatorStatusPublisher()
             .sink { [weak self] status in
-                self?.refreshPeers()
+                self?.onPeerReplicatorStatusChange(status)
             }
             .store(in: &cancellables)
         
+        // Start the multipeer replicator
         replicator.start()
     }
     
-    private func myPeerIdentity() throws -> TLSIdentity {
+    private func getPeerIdentity() throws -> TLSIdentity {
         if let identity = try TLSIdentity.identity(withLabel: identityLabel) {
             if identity.expiration > Date() {
                 return identity
@@ -164,6 +174,69 @@ final class DatabaseManager {
             attributes: [certAttrCommonName: cn],
             label: identityLabel
         )
+    }
+    
+    // MARK: - Change Status Handlers
+    
+    func onMultipeerReplicatorStatusChange(_ status: MultipeerReplicatorStatus) {
+        if let error = status.error {
+            print("Multipeer Replicator Error: \(error)")
+        }
+        onOnlineChange?(status.active)
+    }
+    
+    func onPeerDiscoveryStatusChange(_ status: PeerDiscoveryStatus) {
+        if !status.online {
+            peerReplicatorStatus[status.peerID.str] = nil
+        }
+        updatePeers()
+    }
+    
+    func onPeerReplicatorStatusChange(_ status: PeerReplicatorStatus) {
+        peerReplicatorStatus[status.peerID.str] = status
+        updatePeers()
+    }
+    
+    // MARK: - Peers
+    
+    func myPeerID() -> String {
+        replicator.peerID.str
+    }
+    
+    func updatePeers() {
+        // If a refresh is already scheduled, ignore new calls
+        guard updatePeersWorkItem == nil else { return }
+        
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.doUpdatePeers()
+            self?.updatePeersWorkItem = nil
+        }
+        
+        updatePeersWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
+    }
+    
+    private func doUpdatePeers() {
+        let peers = replicator.neighborPeers.compactMap { id -> Peer? in
+            var connected = false
+            var status = ""
+            
+            if let peerReplStatus = peerReplicatorStatus[id.str] {
+                let activityLevel = peerReplStatus.status.activity
+                let error = peerReplStatus.status.error
+                
+                connected = activityLevel != .stopped
+                
+                if connected || error != nil {
+                    let role = peerReplStatus.outgoing ? "active peer" : "passive peer"
+                    status = "\(role) | \(activities[Int(activityLevel.rawValue)])"
+                    if let error { status += " - \(error.localizedDescription)" }
+                }
+            }
+            
+            return Peer(id: id.str, connected: connected, replicatorStatus: status)
+        }
+        onPeersChange?(peers)
     }
     
     // MARK: - Tasks
@@ -186,38 +259,5 @@ final class DatabaseManager {
     func deleteTask(id: String) throws {
         guard let doc = try collection.document(id: id) else { return }
         try collection.delete(document: doc)
-    }
-    
-    // MARK: - Peers
-    
-    func myPeerID() -> String {
-        replicator.peerID.str
-    }
-    
-    func refreshPeers() {
-        // If a refresh is already scheduled, ignore new calls
-        guard refreshPeersWorkItem == nil else { return }
-        
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.doRefreshPeers()
-            self?.refreshPeersWorkItem = nil
-        }
-        
-        refreshPeersWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-    }
-    
-    private func doRefreshPeers() {
-        let peers = replicator.neighborPeers.compactMap { id -> Peer? in
-            guard let info = replicator.peerInfo(for: id) else { return nil }
-            
-            var status = activities[Int(info.replicatorStatus.activity.rawValue)]
-            if let error = info.replicatorStatus.error?.localizedDescription {
-                status += " - \(error)"
-            }
-            
-            return Peer(id: id.str, online: info.online, status: status)
-        }
-        onPeersChange?(peers)
     }
 }

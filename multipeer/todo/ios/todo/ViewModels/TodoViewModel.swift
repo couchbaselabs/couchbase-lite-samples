@@ -74,7 +74,7 @@ class TodoViewModel: ObservableObject {
         }
     }
     
-    func refreshPeers() {
-        databaseManager.refreshPeers()
+    func updatePeers() {
+        databaseManager.updatePeers()
     }
 }
