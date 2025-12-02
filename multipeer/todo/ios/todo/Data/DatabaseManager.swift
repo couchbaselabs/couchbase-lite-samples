@@ -46,7 +46,6 @@ final class DatabaseManager {
     
     // MARK: - MultipeerReplicator
     private var replicator: MultipeerReplicator!
-    private var updatePeersWorkItem: DispatchWorkItem?
     private var peerReplicatorStatus: [String: PeerReplicatorStatus] = [:]
     
     // MARK: - Publishers
@@ -204,19 +203,6 @@ final class DatabaseManager {
     }
     
     func updatePeers() {
-        // If a refresh is already scheduled, ignore new calls
-        guard updatePeersWorkItem == nil else { return }
-        
-        let workItem = DispatchWorkItem { [weak self] in
-            self?.doUpdatePeers()
-            self?.updatePeersWorkItem = nil
-        }
-        
-        updatePeersWorkItem = workItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
-    }
-    
-    private func doUpdatePeers() {
         let peers = replicator.neighborPeers.compactMap { id -> Peer? in
             var connected = false
             var status = ""
@@ -228,7 +214,7 @@ final class DatabaseManager {
                 connected = activityLevel != .stopped
                 
                 if connected || error != nil {
-                    let role = peerReplStatus.outgoing ? "active peer" : "passive peer"
+                    let role = peerReplStatus.outgoing ? "passive peer" : "active peer"
                     status = "\(role) | \(activities[Int(activityLevel.rawValue)])"
                     if let error { status += " - \(error.localizedDescription)" }
                 }
