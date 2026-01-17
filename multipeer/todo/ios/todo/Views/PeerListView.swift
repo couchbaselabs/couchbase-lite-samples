@@ -25,21 +25,23 @@ struct PeerListView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                List(viewModel.peers) { peer in
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text(peer.id.short())
-                                .font(.headline)
-                            Text(peer.replicatorStatus)
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
+                List {
+                    ForEach(viewModel.peers, id: \.id) { peer in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(peer.id.short())
+                                    .font(.headline)
+                                Text(peer.replicatorStatus ?? "")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
+                            }
+                            Spacer()
+                            Circle()
+                                .fill(peer.replicating ? Color.green : Color.gray.opacity(0.5))
+                                .frame(width: 12, height: 12)
                         }
-                        Spacer()
-                        Circle()
-                            .fill(peer.connected ? Color.green : Color.gray.opacity(0.5))
-                            .frame(width: 12, height: 12)
+                        .padding(.vertical, 4)
                     }
-                    .padding(.vertical, 4)
                 }
             }
             .navigationTitle("Peers")

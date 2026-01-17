@@ -116,19 +116,22 @@ final class DatabaseManager {
         let identity = try getPeerIdentity()
         
         // Setup a peer authenticator
-        let auth = MultipeerCertificateAuthenticator { _, _ in true }
+        let auth = MultipeerCertificateAuthenticator(authenticator: { _, _ in
+            true
+        })
         
         // Setup 'tasks' collection for replication
         let collections =  [MultipeerCollectionConfiguration(collection: collection)]
         
         // Create a multipeer replicator config with groupID ('com.couchbase.multipeer.todo'),
         // identity, authenticator, and collections
-        let config = MultipeerReplicatorConfiguration(
+        var config = MultipeerReplicatorConfiguration(
             peerGroupID: groupID,
             identity: identity,
             authenticator: auth,
             collections: collections
         )
+        config.transports = [.bluetooth]
         
         // Create a multipeer replicator with the config
         replicator = try MultipeerReplicator(config: config)
@@ -204,25 +207,54 @@ final class DatabaseManager {
     
     func updatePeers() {
         let peers = replicator.neighborPeers.compactMap { id -> Peer? in
-            var connected = false
-            var status = ""
-            
-            if let peerReplStatus = peerReplicatorStatus[id.str] {
-                let activityLevel = peerReplStatus.status.activity
-                let error = peerReplStatus.status.error
-                
-                connected = activityLevel != .stopped
-                
-                if connected || error != nil {
-                    let role = peerReplStatus.outgoing ? "passive peer" : "active peer"
-                    status = "\(role) | \(activities[Int(activityLevel.rawValue)])"
-                    if let error { status += " - \(error.localizedDescription)" }
-                }
+            guard let peerInfo = replicator.peerInfo(for: id) else {
+                return nil
             }
             
-            return Peer(id: id.str, connected: connected, replicatorStatus: status)
+            let replStatus = peerReplicatorStatus[id.str]
+            let replicating = replStatus?.status.activity != .stopped
+            let replTransport = replStatus?.transport
+            let statusDesc = makeStatusDescription(for: peerInfo, replicatorStatus: replStatus)
+            
+            return Peer(
+                id: id.str,
+                transports: peerInfo.transports,
+                replicating: replicating,
+                replicatorTransport: replTransport,
+                replicatorStatus: statusDesc
+            )
         }
         onPeersChange?(peers)
+    }
+    
+    func makeStatusDescription(for peerInfo: PeerInfo, replicatorStatus: PeerReplicatorStatus?) -> String? {
+        let orderedTransports: [MultipeerTransport] = [.wifi, .bluetooth]
+        
+        func transportName(_ tr: MultipeerTransport) -> String {
+            let name = (tr == .wifi) ? "wifi" : "bt"
+            return (replicatorStatus?.transport == tr) ? "*\(name)" : name
+        }
+        
+        let transportInfo = orderedTransports
+            .filter { peerInfo.transports.contains($0) }
+            .map(transportName)
+            .joined(separator: ",")
+        
+        var replInfo = ""
+        if let replStatus = replicatorStatus {
+            let role = replStatus.outgoing ? "active peer" : "passive peer"
+            let activityLevel = replStatus.status.activity
+            
+            replInfo += "\(role) | \(activities[Int(activityLevel.rawValue)])"
+            if let error = replStatus.status.error {
+                replInfo += " • \(error.localizedDescription)"
+            }
+        }
+        
+        var parts: [String] = []
+        if !transportInfo.isEmpty { parts.append(transportInfo) }
+        if !replInfo.isEmpty { parts.append(replInfo) }
+        return parts.isEmpty ? nil : parts.joined(separator: " | ")
     }
     
     // MARK: - Tasks

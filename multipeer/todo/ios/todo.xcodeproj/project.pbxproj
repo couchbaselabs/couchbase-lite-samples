@@ -7,18 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		408FC7642E212C520037CCD0 /* CouchbaseLiteSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408FC7632E212C520037CCD0 /* CouchbaseLiteSwift.xcframework */; };
-		408FC7652E212C520037CCD0 /* CouchbaseLiteSwift.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 408FC7632E212C520037CCD0 /* CouchbaseLiteSwift.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		408160B32F15CD52004D8590 /* CouchbaseLiteSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 408160992F15BA52004D8590 /* CouchbaseLiteSwift.framework */; };
+		408160B42F15CD52004D8590 /* CouchbaseLiteSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 408160992F15BA52004D8590 /* CouchbaseLiteSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		408160982F15BA52004D8590 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 408160692F15BA52004D8590 /* CouchbaseLite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9343F133207D61AB00F19A89;
+			remoteInfo = CBL_EE_Swift;
+		};
+		408160AA2F15BA82004D8590 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 408160692F15BA52004D8590 /* CouchbaseLite.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 9343F011207D61AB00F19A89;
+			remoteInfo = CBL_EE_Swift;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		408FC7662E212C520037CCD0 /* Embed Frameworks */ = {
+		408160B52F15CD53004D8590 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				408FC7652E212C520037CCD0 /* CouchbaseLiteSwift.xcframework in Embed Frameworks */,
+				408160B42F15CD52004D8590 /* CouchbaseLiteSwift.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -26,8 +43,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		408160692F15BA52004D8590 /* CouchbaseLite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CouchbaseLite.xcodeproj; path = "couchbase-lite-ios/CouchbaseLite.xcodeproj"; sourceTree = "<group>"; };
 		408FC7402E212AEC0037CCD0 /* todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		408FC7632E212C520037CCD0 /* CouchbaseLiteSwift.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = CouchbaseLiteSwift.xcframework; path = Frameworks/CouchbaseLiteSwift.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -56,18 +73,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				408FC7642E212C520037CCD0 /* CouchbaseLiteSwift.xcframework in Frameworks */,
+				408160B32F15CD52004D8590 /* CouchbaseLiteSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4081606A2F15BA52004D8590 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				408160992F15BA52004D8590 /* CouchbaseLiteSwift.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		408FC7372E212AEC0037CCD0 = {
 			isa = PBXGroup;
 			children = (
+				408160692F15BA52004D8590 /* CouchbaseLite.xcodeproj */,
 				408FC7422E212AEC0037CCD0 /* todo */,
-				408FC7622E212C520037CCD0 /* Frameworks */,
 				408FC7412E212AEC0037CCD0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -80,14 +105,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		408FC7622E212C520037CCD0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				408FC7632E212C520037CCD0 /* CouchbaseLiteSwift.xcframework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -98,11 +115,12 @@
 				408FC73C2E212AEC0037CCD0 /* Sources */,
 				408FC73D2E212AEC0037CCD0 /* Frameworks */,
 				408FC73E2E212AEC0037CCD0 /* Resources */,
-				408FC7662E212C520037CCD0 /* Embed Frameworks */,
+				408160B52F15CD53004D8590 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				408160AB2F15BA82004D8590 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				408FC7422E212AEC0037CCD0 /* todo */,
@@ -141,12 +159,28 @@
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 408FC7412E212AEC0037CCD0 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 4081606A2F15BA52004D8590 /* Products */;
+					ProjectRef = 408160692F15BA52004D8590 /* CouchbaseLite.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				408FC73F2E212AEC0037CCD0 /* todo */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		408160992F15BA52004D8590 /* CouchbaseLiteSwift.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = CouchbaseLiteSwift.framework;
+			remoteRef = 408160982F15BA52004D8590 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		408FC73E2E212AEC0037CCD0 /* Resources */ = {
@@ -168,7 +202,112 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		408160AB2F15BA82004D8590 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = CBL_EE_Swift;
+			targetProxy = 408160AA2F15BA82004D8590 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		408160A82F15BA61004D8590 /* Debug_EE */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = N2Q372V7W2;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug_EE;
+		};
+		408160A92F15BA61004D8590 /* Debug_EE */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = N2Q372V7W2;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = todo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Todo;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Used for for peer-to-peer sync.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Used for for peer-to-peer sync.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.couchbase.multipeer.todo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug_EE;
+		};
 		408FC7492E212AEF0037CCD0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -302,7 +441,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = todo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Todo;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Used for discovering and connecting to peers for peer-to-peer sync.";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Used for for peer-to-peer sync.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Used for for peer-to-peer sync.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -334,7 +474,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = todo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Todo;
-				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Used for discovering and connecting to peers for peer-to-peer sync.";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "Used for for peer-to-peer sync.";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "Used for for peer-to-peer sync.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -361,6 +502,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				408FC7492E212AEF0037CCD0 /* Debug */,
+				408160A82F15BA61004D8590 /* Debug_EE */,
 				408FC74A2E212AEF0037CCD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -370,6 +512,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				408FC74C2E212AEF0037CCD0 /* Debug */,
+				408160A92F15BA61004D8590 /* Debug_EE */,
 				408FC74D2E212AEF0037CCD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;

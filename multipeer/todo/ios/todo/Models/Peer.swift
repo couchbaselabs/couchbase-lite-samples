@@ -18,10 +18,13 @@
 //
 
 import Foundation
+import CouchbaseLiteSwift
 
 /// Peer info and it's  status.
 struct Peer: Identifiable {
     var id: String
-    var connected: Bool
-    var replicatorStatus: String
+    var transports: Set<MultipeerTransport>
+    var replicating: Bool
+    var replicatorTransport: MultipeerTransport?
+    var replicatorStatus: String?
 }
